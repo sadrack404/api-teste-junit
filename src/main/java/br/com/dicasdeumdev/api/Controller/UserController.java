@@ -1,6 +1,8 @@
 package br.com.dicasdeumdev.api.Controller;
 
 import br.com.dicasdeumdev.api.domain.User;
+import br.com.dicasdeumdev.api.services.impl.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -8,11 +10,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping(value = "/user")
 public class UserController {
+    @Autowired
+    private UserService service;
 
-    @GetMapping("/{id}")
+    @GetMapping(value = "/{id}")
     public ResponseEntity<User> findById(@PathVariable Long id) {
-        return ResponseEntity.ok().body(new User(1L, "User 1", "email 1", "password 1"));
+        return ResponseEntity.ok().body(service.findById(id));
     }
+
 }
