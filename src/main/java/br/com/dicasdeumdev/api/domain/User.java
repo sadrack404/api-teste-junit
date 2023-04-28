@@ -10,7 +10,7 @@ import java.util.Objects;
 @Setter
 @ToString
 @AllArgsConstructor
-@Entity
+@Entity(name = "usuario")
 @NoArgsConstructor
 public class User {
     @Id
