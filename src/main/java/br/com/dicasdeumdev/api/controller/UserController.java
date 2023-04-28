@@ -3,15 +3,15 @@ package br.com.dicasdeumdev.api.controller;
 import br.com.dicasdeumdev.api.config.ModelMapperConfig;
 import br.com.dicasdeumdev.api.domain.User;
 import br.com.dicasdeumdev.api.domain.dto.UserDTO;
+import br.com.dicasdeumdev.api.repositories.UserRepository;
 import br.com.dicasdeumdev.api.services.impl.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -35,6 +35,12 @@ public class UserController {
         List<User> usuarios = (List<User>) service.findAll();
         List<UserDTO> usuariosDTO = usuarios.stream().map(user -> modelMapper.map(user, UserDTO.class)).toList();
         return ResponseEntity.ok().body(usuariosDTO);
+    }
+
+    @PostMapping
+    public ResponseEntity<UserDTO> create(@RequestBody UserDTO obj) {
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(service.create(obj).getId()).toUri();
+        return ResponseEntity.created(uri).build();
     }
 
 }

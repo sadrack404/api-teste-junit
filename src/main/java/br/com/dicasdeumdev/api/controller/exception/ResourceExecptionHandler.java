@@ -1,5 +1,6 @@
 package br.com.dicasdeumdev.api.controller.exception;
 
+import br.com.dicasdeumdev.api.services.exceptions.DataIntregityViolationException;
 import br.com.dicasdeumdev.api.services.exceptions.ObjectNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +16,12 @@ public class ResourceExecptionHandler {
     public ResponseEntity<StandardError> objectNotFound(ObjectNotFoundException ex, HttpServletRequest request) {
         StandardError erro = new StandardError(LocalDate.now().atStartOfDay(), HttpStatus.NOT_FOUND.value(), ex.getMessage(), request.getRequestURI());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(erro);
+    }
+
+    @ExceptionHandler(DataIntregityViolationException.class)
+    public ResponseEntity<StandardError> dataIntregityViolation(DataIntregityViolationException ex, HttpServletRequest request) {
+        StandardError erro = new StandardError(LocalDate.now().atStartOfDay(), HttpStatus.BAD_REQUEST.value(), ex.getMessage(), request.getRequestURI());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(erro);
     }
 
 }
