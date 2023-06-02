@@ -23,7 +23,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public User findById(Long id) {
         Optional<User> obj = repository.findById(id);
-        return obj.orElseThrow(() -> new ObjectNotFoundException("Usuario com o ID"));
+        return obj.orElseThrow(() -> new ObjectNotFoundException("Usuario com o ID nao encontrado!"));
     }
 
     @Override
@@ -49,5 +49,11 @@ public class UserServiceImpl implements UserService {
     public User update(UserDTO obj) {
         findByEmail(obj);
         return repository.save(modelMapper.map(obj, User.class));
+    }
+
+    @Override
+    public void delete(Long id) {
+        findById(id);
+        repository.deleteById(id);
     }
 }
