@@ -1,9 +1,7 @@
 package br.com.dicasdeumdev.api.controller;
 
-import br.com.dicasdeumdev.api.config.ModelMapperConfig;
 import br.com.dicasdeumdev.api.domain.User;
 import br.com.dicasdeumdev.api.domain.dto.UserDTO;
-import br.com.dicasdeumdev.api.repositories.UserRepository;
 import br.com.dicasdeumdev.api.services.impl.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,6 +46,12 @@ public class UserController {
         obj.setId(id);
         User newObj = service.update(obj);
         return ResponseEntity.ok().body(modelMapper.map(newObj, UserDTO.class));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<UserDTO> delete(@PathVariable Long id) {
+        service.delete(id);
+        return ResponseEntity.noContent().build();
     }
 
 }
