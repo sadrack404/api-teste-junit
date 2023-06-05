@@ -3,6 +3,7 @@ package br.com.dicasdeumdev.api.services.impl;
 import br.com.dicasdeumdev.api.domain.User;
 import br.com.dicasdeumdev.api.domain.dto.UserDTO;
 import br.com.dicasdeumdev.api.repositories.UserRepository;
+import br.com.dicasdeumdev.api.services.exceptions.DataIntregityViolationException;
 import br.com.dicasdeumdev.api.services.exceptions.ObjectNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -12,10 +13,11 @@ import org.mockito.MockitoAnnotations;
 import org.modelmapper.ModelMapper;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 
@@ -73,11 +75,41 @@ class UserServiceImplTest {
     }
 
     @Test
-    void whenFindAllUsersReturnAll() {
+    void whenFindAllThenReturnAnListOfUsersDTO() {
+        when(repository.findAll()).thenReturn(List.of(user));
+
+        List<User> response = (List<User>) service.findAll();
+
+        assertNotNull(response);
+        assertEquals(1, response.size());
+        assertEquals(User.class, response.get(0).getClass());
+        assertEquals(ID, response.get(0).getId());
+        assertEquals(NAME, response.get(0).getName());
+        assertEquals(EMAIL, response.get(0).getEmail());
+        assertEquals(PASSWORD, response.get(0).getPassword());
     }
 
     @Test
-    void create() {
+    void whenCreateUserthenReturnSuccess() {
+        when(repository.save(any())).thenReturn(user);
+
+        User response = service.create(userDTO);
+        assertNotNull(response);
+        assertEquals(User.class, response.getClass());
+        assertEquals(ID, response.getId());//VERIFICA SE O OBJETO É IGUAL AO ID
+        assertEquals(NAME, response.getName());//VERIFICA SE O OBJETO É IGUAL AO NAME
+        assertEquals(EMAIL, response.getEmail());//VERIFICA SE O OBJETO É IGUAL AO EMAIL
+    }
+
+    @Test
+    void whenCreateUserthenReturnAnDataIntegrityViolationException() {
+        when(repository.save(any())).thenReturn(user);
+
+        try{
+            service.create(userDTO);
+        } catch (Exception ex){
+            assertEquals(DataIntregityViolationException.class, ex.getClass());
+        }
     }
 
     @Test
