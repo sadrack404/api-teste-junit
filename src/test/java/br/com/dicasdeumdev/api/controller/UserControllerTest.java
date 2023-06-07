@@ -10,6 +10,15 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.modelmapper.ModelMapper;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.ResponseEntity;
+
+import java.util.Objects;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.when;
 
 @SpringBootTest
 class UserControllerTest {
@@ -39,10 +48,30 @@ class UserControllerTest {
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
+        startUser();
     }
 
     @Test
-    void findById() {
+    void whenFindByIdThenReturnSucess() {
+        //Quando o  service findById receber qauqluer Long retorne um usario
+        when(service.findById(anyLong())).thenReturn(user);
+        //Quando o modelmapper fizer o mapeamento de any para any retorne um usuarioDTO
+        when(modelMapper.map(any(), any())).thenReturn(userDTO);
+
+        ResponseEntity<UserDTO> response = controller.findById(ID);
+
+        assertNotNull(response);
+        assertNotNull(response.getBody());
+
+        //Garanta que o response seja um ResponseEntity
+        assertEquals(ResponseEntity.class, response.getClass());
+        //Garanta que o Body seja um user body
+        assertEquals(UserDTO.class, Objects.requireNonNull(response.getBody()).getClass());
+
+        assertEquals(ID, response.getBody().getId());
+        assertEquals(NAME, response.getBody().getName());
+        assertEquals(PASSWORD, response.getBody().getPassword());
+        assertEquals(EMAIL, response.getBody().getEmail());
     }
 
     @Test
