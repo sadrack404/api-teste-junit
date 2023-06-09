@@ -21,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @SpringBootTest
 class UserControllerTest {
@@ -30,11 +30,7 @@ class UserControllerTest {
     public static final String NAME = "Valdir";
     public static final String EMAIL = "email@gmail.com";
     public static final String PASSWORD = "123456";
-
-    public static final String EMAIL_JA_CADASTRADO = "Email já cadastrado";
-    public static final String USUARIO_COM_O_ID_NAO_ENCONTRADO = "Usuario com o ID nao encontrado!";
     public static final int INDEX = 0;
-    public static final String OBJETO_NAO_ENCONTRADO = "Objeto não encontrado";
 
     private User user;
     private UserDTO userDTO;
@@ -100,16 +96,42 @@ class UserControllerTest {
     }
 
     @Test
-    void create() {
+    void whenCreateThenReturnCreated() {
+        when(service.create(any())).thenReturn(user);
 
+        ResponseEntity<UserDTO> response = controller.create(userDTO);
+
+        assertNotNull(response);
+        assertEquals(ResponseEntity.class, response.getClass());
+        assertEquals(HttpStatus.CREATED, response.getStatusCode());
+        assertNotNull(response.getHeaders().get("Location"));
     }
 
     @Test
-    void update() {
+    void whenUpdateThenReturnSucess() {
+        when(service.update(userDTO)).thenReturn(user);
+        when(modelMapper.map(any(), any())).thenReturn(userDTO);
+
+        ResponseEntity<UserDTO> response = controller.update(ID, userDTO);
+
+        assertNotNull(response);
+        assertEquals(ResponseEntity.class, response.getClass());
+        assertEquals(UserDTO.class, Objects.requireNonNull(response.getBody()).getClass());
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+
+        assertEquals(ID, response.getBody().getId());
+        assertEquals(NAME, response.getBody().getName());
+        assertEquals(EMAIL, response.getBody().getEmail());
     }
 
     @Test
-    void delete() {
+    void whenDeleteThenReturnNoContent() {
+        doNothing().when(service).delete(anyLong());
+        ResponseEntity<UserDTO> response = controller.delete(ID);
+
+        assertNotNull(response);
+        assertEquals(ResponseEntity.class, response.getClass());
+        verify(service, times(1)).delete(anyLong());
     }
 
     private void startUser() {
