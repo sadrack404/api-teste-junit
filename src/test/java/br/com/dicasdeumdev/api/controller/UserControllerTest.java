@@ -90,7 +90,7 @@ class UserControllerTest {
         assertNotNull(response.getBody());
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(ResponseEntity.class, response.getClass());
-        //assertEquals(ArrayList.class, response.getBody().getClass());
+        assertEquals(ArrayList.class, response.getBody().getClass());
         assertEquals(UserDTO.class, Objects.requireNonNull(response.getBody().get(INDEX)).getClass());
 
         assertEquals(ID, response.getBody().get(INDEX).getId());
@@ -101,6 +101,7 @@ class UserControllerTest {
 
     @Test
     void create() {
+
     }
 
     @Test
