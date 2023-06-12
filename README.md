@@ -19,22 +19,6 @@ A API foi desenvolvida utilizando a linguagem Java e o framework Spring Boot. El
 
 O projeto segue uma estrutura de diretórios recomendada para aplicações Spring Boot, com separação clara entre código-fonte e testes. A estrutura é a seguinte:
 
-├── src
-│ ├── main
-│ │ ├── java
-│ │ │ └── br.com.dicasdeumdev.api
-│ │ │ ├── controllers
-│ │ │ ├── domain
-│ │ │ ├── repositories
-│ │ │ └── services
-│ │ └── resources
-│ └── test
-│ ├── java
-│ │ └── br.com.dicasdeumdev.api
-│ │ └── services
-│ └── resources
-
-
 - O diretório `src/main/java` contém o código-fonte da API, dividido em pacotes de acordo com suas responsabilidades.
 - O diretório `src/main/resources` contém os recursos da aplicação, como arquivos de configuração.
 - O diretório `src/test/java` contém os testes unitários, organizados em pacotes que refletem a estrutura do código-fonte.
