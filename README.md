@@ -4,7 +4,7 @@ Este repositório contém o código-fonte de uma API de teste desenvolvida como 
 
 ## Visão geral do projeto
 
-O objetivo deste projeto é fornecer um exemplo de implementação de testes unitários para uma API RESTful, demonstrando o uso adequado do JUnit e outras bibliotecas populares de teste.
+O objetivo deste projeto é fornecer um exemplo de implementação de testes unitários para uma API, demonstrando o uso adequado do JUnit e outras bibliotecas populares de teste.
 
 A API foi desenvolvida utilizando a linguagem Java e o framework Spring Boot. Ela oferece funcionalidades básicas para manipulação de usuários, incluindo operações de busca, criação, atualização e exclusão. Os testes foram implementados para cobrir cenários de sucesso, casos de exceção e casos limite.
 
